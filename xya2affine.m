@@ -7,6 +7,7 @@ function [T] = xya2affine(xya)
         da = xya{i}(3);
         
         T{i} = [cos(da) -sin(da) dx; sin(da) cos(da) dy];
+        T{i} = [T{i}; 0 0 1];
     end
 end
 
