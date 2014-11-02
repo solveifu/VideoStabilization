@@ -6,37 +6,43 @@ function [T] = matsushita_method(k,vid,num_corners,qual_corners,dist_corners,ful
     T_forw = rigid_affine(corn,flow,full_affine);
     inv(T_forw{1})
     
-    T_rew = cellfun(@inv,T_forw,'un',0);
-
-    for i=1:length(vid)-k-1  
+    T_rev = cellfun(@inv,T_forw,'un',0);
+    T_prev = cell(1,k);
+    T_post = cell(1,k);
+    T = cell(length(T_forw),1);
+    for i=1:50
         % The first frames, where there is less than k previous frames
         if (i <= k)
-            for j=1:k
-                flow_up{j} = cv.calcOpticalFlowPyrLK(vid{i},vid{i+j},corn{i});
+            % If later than first frame
+            if ~isequal(i,1)
+                for j=1:i-1
+                    T_prev = matrix_accum(T_forw(i-j:i-1));
+                end
             end
-            for j=1:i-1
-                flow_down{j} = cv.calcOpticalFlowPyrLK(vid{i},vid{i-j},corn{i});
-            end
+            T_post = matrix_accum(flip(T_rev(i:i+k-1)));
+                 
         % The last frames, where there is less than k future frames
         elseif (i >= length(vid)-k)
-            for j=1:k
-                flow_down{j} = cv.calcOpticalFlowPyrLK(vid{i},vid{i-j},corn{i});
-            end
-            for j=1:i-1
-                flow_up{j} = cv.calcOpticalFlowPyrLK(vid{i},vid{i+j},corn{i});
-            end
+            
+            
         % All the frames, where there is k previous and future frames
         else
-            for j=1:k
-                flow_up{j} = cv.calcOpticalFlowPyrLK(vid{i},vid{i+j},corn{i});
-                flow_down{j} = cv.calcOpticalFlowPyrLK(vid{i},vid{i-j},corn{i});
-            end
+            % Accumulate transformations from frame to frame -k,...,curr,...,k
+            %for j=1:k-1
+            %    idx = i-k+j;
+                T_prev = matrix_accum(T_forw(i-k-1:i));
+            %end
+            %T_prev{k} = T_forw{i};
+            %T_post{1} = T_rew{i};
+            %for j=1:k
+                T_post = matrix_accum(flip(T_rev(i:i+k-1)));
+            %end
         end 
         % Remove empty cells
-        flow_up(~cellfun('isempty',flow_up));     
-        flow_down(~cellfun('isempty',flow_down)); 
+        %T_prev(~cellfun('isempty',T_prev));     
+        %T_post(~cellfun('isempty',T_post)); 
         
-        T{i} = matsushita(k,T_prev,T_post,full_affine);
+        T{i} = matsushita(k,T_prev,T_post);
     end
 end
 
