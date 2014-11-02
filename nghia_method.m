@@ -1,4 +1,4 @@
-function [T_smud] = nghia_method(vid,num_corners,qual_corners,dist_corners,full_affine,smooth_len)
+function [T_smud,T] = nghia_method(vid,num_corners,qual_corners,dist_corners,full_affine,smooth_len)
     % Find points to track and the optical flow
     [corn,flow] = feature_estim(vid,num_corners,qual_corners,dist_corners);
     
