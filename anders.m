@@ -23,8 +23,7 @@ T_smud = nghia_method(vid,num_corners,qual_corners,dist_corners,full_affine,smoo
 %T_smud = matsushita_method(5,vid,num_corners,qual_corners,dist_corners,1);
 
 % Warp frames
-T_smuds = T_smud(1:44);
-vid_trans = warp(vid_org,T_smuds);
+vid_trans = warp(vid_org,T_smud);
 
 % Play video 5 times
 play_video(vid_org,vid_trans,5);
