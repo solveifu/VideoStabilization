@@ -4,7 +4,10 @@ function trajectory_plotter(T,T_smud)
 
 %Calculate the original trajectory by accumulating T.
 T_acc = matrix_accum(T);
-
+T_unit = cell(1,1);
+T_unit{1} = eye(3);
+T_acc = [T_unit;T_acc];
+T_smud = [T_smud;T_unit];
 %Method 1: Just adding translation coordinates for the original trajectory
 %and the warp matrices.
 T_acc_x = get_vector(T_acc,1,3);

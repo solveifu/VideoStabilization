@@ -18,17 +18,19 @@ smooth_len = 50;
 
 % Estimate transformations for stabilization
 %[T_smud,T] = nghia_method(vid,num_corners,qual_corners,dist_corners,full_affine,smooth_len);
-[T_smud,T] = matsushita_method(20,vid,num_corners,qual_corners,dist_corners,1);
+[T_smud,T] = matsushita_method(30,vid,num_corners,qual_corners,dist_corners,1);
 
 % Warp frames
 vid_trans = warp(vid_org,T_smud(1:380));
 
 % Play video 5 times
-play_video(vid_org,vid_trans,5);
+play_video(vid_org,vid_trans,2);
 
 %TT = cell2mat(T);
 %Tx =  TT(1:3:end,3);
 %plot(Tx)
-close all
+
 trajectory_plotter(T(1:380),T_smud(1:380))
+
+
 
