@@ -1,18 +1,45 @@
 function [S] = matsushita(k,T_prev,T_post)
+%     S = zeros(3,3);
+%     t=1:k;
+%     dev=10*sqrt(k);
+%     G_k = 1/(sqrt(2*pi)*dev)*exp(-t.^2/(2*dev^2));
+%   
+%     for j=1:length(T_prev)
+%        if(~isempty(T_prev{j}))
+%            S = S + T_prev{j}.*G_k(length(T_prev)-j+1);
+%        end
+%     end
+%     for j=1:length(T_post)
+%        if(~isempty(T_post{j}))
+%            S = S + T_post{j}.*G_k(j);
+%        end
+%     end
+%     S = S./S(3,3);
+    
+    T = cell(2*k+1,1);
+    T(1:k,1) = T_prev(1:k,1);
+    T{k+1,1} = [1 0 0;0 1 0;0 0 1];
+    T(k+2:end,1) = T_post(1:k,1);
+    for i=1:length(T);
+        if(isempty(T{i}))
+            T{i} = [1 0 0;0 1 0;0 0 1];
+        end
+    end
+    
+    
+    n=1:4*k+1;
+    dev=sqrt(k);
+    G_k = 1/(sqrt(2*pi)*dev)*exp(-(n-(2*k+1)).^2/(2*dev^2));
+    
     S = zeros(3,3);
-    t=1:k;
-    G_k = 1/(sqrt(2*pi)*sqrt(k))*exp(-t.^2/(2*sqrt(k)^2));
-  
-    for j=1:length(T_prev)
-        if(~isempty(T_prev{j}))
-            S(1:2,1:3) = S(1:2,1:3) + T_prev{j}(1:2,1:3).*G_k(length(T_prev)-j+1);
+    for i=1:3
+        for j=1:3
+            param = get_vector(T,i,j)';
+            out = conv(param,G_k,'same');
+            S(i,j) = sum(out);
         end
     end
-    for j=1:length(T_post)
-        if(~isempty(T_post{j}))
-            S(1:2,1:3) = S(1:2,1:3) + T_post{j}(1:2,1:3).*G_k(j);
-        end
-    end
-    S(3,:) = [0 0 1];
+    S = S./S(3,3);
+    
 end
 
