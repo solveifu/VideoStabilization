@@ -1,4 +1,4 @@
-function trajectory_plotter(T,T_smud)
+function trajectory_plotter(T,T_smud,title_name)
 %TRAJECTORY_PLOTTER Plots the translation trajectories pre and post
 %stabilization.
 
@@ -32,9 +32,11 @@ N=0:length(T_acc_x)-1;
 subplot(2,1,1)
 plot(N,T_acc_x,N,T_final_x,N,T2_final_x)
 legend('Original','Compensated, method 1','Compensated, method 2')
+title([title_name ', x displacement']);
 subplot(2,1,2)
 plot(N,T_acc_y,N,T_final_y,N,T2_final_y)
 legend('Original','Compensated, method 1','Compensated, method 2')
+title([title_name ', y displacement']);
 
 
 
