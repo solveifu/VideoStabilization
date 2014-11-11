@@ -16,9 +16,9 @@ function [T_smud,T] = litvin_method(vid,full_affine,sigma_z,sigma_r,sigma_b,sigm
            0 0 0 0 0 0 1 0 0 0;
            0 0 0 0 0 0 0 0 1 0];
     m.u = 0;
-    m.P = diag(ones(1,10));
-    m.Q = diag([0 sigma_z 0 sigma_z sigma_r sigma_r 0 sigma_b 0 sigma_b]);
-    m.R = diag([sigma_obs_z sigma_obs_r sigma_obs_r sigma_obs_z sigma_obs_b sigma_obs_b]);
+    m.P = eye(10)*0.5;
+    m.Q = diag([0 sigma_z^2 0 sigma_z^2 sigma_r^2 sigma_r^2 0 sigma_b^2 0 sigma_b^2]);
+    m.R = diag([sigma_obs_z^2 sigma_obs_r^2 sigma_obs_r^2 sigma_obs_z^2 sigma_obs_b^2 sigma_obs_b^2]);
     
     % Change the transformations matrices to observation matrix form
     X_n = zeros(length(T_acc),6);
@@ -42,7 +42,7 @@ function [T_smud,T] = litvin_method(vid,full_affine,sigma_z,sigma_r,sigma_b,sigm
     % applying estimate
     T_smud = cell(length(T_est),1);
     for i=1:length(T_smud)
-        T_smud{i} = T_hat{i}*inv(T_acc{i});
+        T_smud{i} = T{i}*T_hat{i}*inv(T_acc{i});
     end
 end
 

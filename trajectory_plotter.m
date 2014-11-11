@@ -12,6 +12,10 @@ T_smud = [T_smud;T_unit];
 %and the warp matrices.
 T_acc_x = get_vector(T_acc,1,3);
 T_acc_y = get_vector(T_acc,2,3);
+T_acc_a1 = get_vector(T_acc,1,1);
+T_acc_a2 = get_vector(T_acc,1,2);
+T_acc_a3 = get_vector(T_acc,2,1);
+T_acc_a4 = get_vector(T_acc,2,2);
 
 T_smud_x = get_vector(T_smud,1,3);
 T_smud_y = get_vector(T_smud,2,3);
@@ -27,16 +31,37 @@ end
 
 T2_final_x = get_vector(T2_final,1,3);
 T2_final_y = get_vector(T2_final,2,3);
+T2_final_a1 = get_vector(T2_final,1,1);
+T2_final_a2 = get_vector(T2_final,1,2);
+T2_final_a3 = get_vector(T2_final,2,1);
+T2_final_a4 = get_vector(T2_final,2,2);
 
 N=0:length(T_acc_x)-1;
-subplot(2,1,1)
-plot(N,T_acc_x,N,T_final_x,N,T2_final_x)
-legend('Original','Compensated, method 1','Compensated, method 2')
+subplot(3,2,1)
+plot(N,T_acc_x,N,T2_final_x,'r')
+legend('Original','Compensated')
 title([title_name ', x displacement']);
-subplot(2,1,2)
-plot(N,T_acc_y,N,T_final_y,N,T2_final_y)
-legend('Original','Compensated, method 1','Compensated, method 2')
+subplot(3,2,2)
+plot(N,T_acc_y,N,T2_final_y,'r')
+legend('Original','Compensated')
 title([title_name ', y displacement']);
+subplot(3,2,3)
+plot(N,T_acc_a1,N,T2_final_a1,'r')
+legend('Original','Compensated')
+title([title_name ', a1 displacement']);
+subplot(3,2,4)
+plot(N,T_acc_a2,N,T2_final_a2,'r')
+legend('Original','Compensated')
+title([title_name ', a2 displacement']);
+subplot(3,2,5)
+plot(N,T_acc_a3,N,T2_final_a3,'r')
+legend('Original','Compensated')
+title([title_name ', a3 displacement']);
+subplot(3,2,6)
+plot(N,T_acc_a4,N,T2_final_a4,'r')
+legend('Original','Compensated')
+title([title_name ', a4 displacement']);
+
 
 
 

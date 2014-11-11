@@ -1,9 +1,11 @@
 function [T,T_forw] = matsushita_method(k,vid,num_corners,qual_corners,dist_corners,full_affine)
     % Find points to track and the optical flow
-    [corn,flow] = feature_estim(vid,num_corners,qual_corners,dist_corners);
+    %[corn,flow] = feature_estim(vid,num_corners,qual_corners,dist_corners);
     
     % Get transformation matrices
-    T_forw = rigid_affine(corn,flow,full_affine);
+    %T_forw = rigid_affine(corn,flow,full_affine);
+    T_forw = affine_estim(vid,full_affine);
+    
     inv(T_forw{1})
     
     T_rev = cellfun(@inv,T_forw,'un',0);
