@@ -8,62 +8,60 @@ start_pos = 0; % where to start in seconds
 num_frames = 400;
 
 % Stabilization settings
-num_corners = 500;
-dist_corners = 30;
-qual_corners = 0.01;
-full_affine = 0;
+full_affine = 1;
 smooth_len = 100;
+k = 50;
 
-% Dynamic model
-% System noise, smaller value give more smoothing
-sigma_z = 0.001;        % zoom, a2/a3
-sigma_r = 0.04;         % rotation, a1/a4
-sigma_b = 0.0001;   % translation, b1/b2
-
-% Observation noise, larger value gives more smoothing
-sigma_obs_z = 1;        % zoom, a2/a3
-sigma_obs_r = 1;        % rotation, a1/a4
-sigma_obs_b = 1;        % translation, b1/b2
+% Dynamic model         % System noise, smaller value give more smoothing
+sigma_z = 0.001;        % - zoom, a2/a3
+sigma_r = 0.04;         % - rotation, a1/a4
+sigma_b = 0.0001;       % - translation, b1/b2
+                        % Observation noise, larger value gives more smoothing
+sigma_obs_z = 1;        % - zoom, a2/a3
+sigma_obs_r = 1;        % - rotation, a1/a4
+sigma_obs_b = 1;        % - translation, b1/b2
 
 % Load the video
-%[vid_org,vid] = load_mmreader(strcat(vid_path_stasj,current_vid),start_pos,num_frames);
-%[vid_org,vid] = load_videoreader(strcat(vid_path_laptop,current_vid),start_pos,num_frames);
 [vid_org,vid] = load_videoreader(current_vid,start_pos,num_frames);
 
-% Estimate transformations for stabilization
-%[T_smud_nghia_feature,T_feature] = nghia_method(vid,num_corners,qual_corners,dist_corners,full_affine,smooth_len);
-[T_smud_nghia_direct,T_direct] = nghia_method_direct(vid,1,smooth_len);
-[T_smud,T] = matsushita_method(30,vid,num_corners,qual_corners,dist_corners,1);
-[T_smud_litvin,T] = litvin_method(vid,1,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_obs_b);
+% Estimate motion
+T = motion_estimation(vid,'affine',full_affine);
 
-% Warp frames
-crop_border = 60;
-%vid_trans_feature = warp(vid_org,T_smud_nghia_feature,crop_border);
-%vid_trans_direct = warp(vid_org,T_smud_nghia_direct,crop_border);
-vid_trans_lit = warp(vid_org,T_smud_litvin,crop_border);
-vid_trans_mat = warp(vid_org(1:num_frames-20),T_smud_litvin(1:num_frames-20),crop_border);
+% Estimate transformations for stabilization for Nghia, Matsushita, Litvin
+T_nghia = nghia_method(T,smooth_len);
+T_mat = matsushita_method(T,k);
+T_lit = litvin_method(T,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_obs_b);
+
+% Warp frames, cropping if crop_border > 0
+crop_border = 40;
+vid_lit = warp(vid_org,T_lit,crop_border);
+vid_mat = warp(vid_org,T_mat,crop_border);
+vid_nghia = warp(vid_org,T_nghia,crop_border);
+
+% The videos to compare
+vid_play1 = vid_lit;
+vid_play2 = vid_mat;
 
 % Play both videos 5 times
-play_video(vid_org,vid_trans_lit,5,'compare');
+play_video(vid_org,vid_play1,5,'compare');
 
-% COmpare two transformed videos
-play_video(vid_trans_lit,vid_trans_mat,5,'compare');
+% Compare two transformed videos
+play_video(vid_play1,vid_play2,5,'compare');
 
 % Play stabilized video 2 times
-play_video(vid_org,vid_trans_lit,1,'single');
+play_video(vid_org,vid_play1,1,'single');
 
-% Plot trajectory for both Nghia and Matsushita
+% Plot trajectories
+% Nghia 
 figure
-trajectory_plotter(T_feature,T_smud_nghia_feature,'Nghia feature estimation')
-figure
-trajectory_plotter(T_direct,T_smud_nghia_direct,'Nghia direct estimation')
+trajectory_plotter(T,T_nghia,'Nghia')
 
 % Matsukisatas 
 figure
-trajectory_plotter(T(1:num_frames-20),T_smud(1:num_frames-20),'Matsushita')
+trajectory_plotter(T,T_mat,'Matsushita')
 
 % Litvins
 figure
-trajectory_plotter(T,T_smud_litvin,'Litvin');
+trajectory_plotter(T,T_lit,'Litvin');
 
 

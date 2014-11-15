@@ -1,8 +1,5 @@
-function [T_smud,T] = litvin_method(vid,full_affine,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_obs_b)
-
-    % Get transformation matrices
-    T = affine_estim(vid,full_affine);
-    
+function [T_smud] = litvin_method(T,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_obs_b)
+   
     % Accumulate the transformations
     T_acc = matrix_accum(T);
     

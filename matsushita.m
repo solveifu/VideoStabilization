@@ -1,21 +1,5 @@
 function [S] = matsushita(k,T_prev,T_post)
-%     S = zeros(3,3);
-%     t=1:k;
-%     dev=10*sqrt(k);
-%     G_k = 1/(sqrt(2*pi)*dev)*exp(-t.^2/(2*dev^2));
-%   
-%     for j=1:length(T_prev)
-%        if(~isempty(T_prev{j}))
-%            S = S + T_prev{j}.*G_k(length(T_prev)-j+1);
-%        end
-%     end
-%     for j=1:length(T_post)
-%        if(~isempty(T_post{j}))
-%            S = S + T_post{j}.*G_k(j);
-%        end
-%     end
-%     S = S./S(3,3);
-    
+   
     T = cell(2*k+1,1);
     T(1:k,1) = T_prev(1:k,1);
     T{k+1,1} = [1 0 0;0 1 0;0 0 1];
