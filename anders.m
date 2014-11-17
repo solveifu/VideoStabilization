@@ -2,10 +2,10 @@ clear all; close all;
 
 % Video settings
 vid_path_stasj = 'E:\Dokumenter\Dropbox\Testvideoer\';
-vid_path_laptop = 'C:\Users\Anders\Dropbox\Testvideoer\';
-current_vid = 'hippo.mp4';
-start_pos = 0; % where to start in seconds
-num_frames = 400;
+vid_path_laptop = 'D:\Testvideoer\';
+current_vid = 'Colonoskopi_24064049263_20140408-1.avi';
+start_pos = 15; % where to start in seconds
+num_frames = 250;
 
 % Stabilization settings
 full_affine = 1;
@@ -22,13 +22,14 @@ sigma_obs_r = 1;        % - rotation, a1/a4
 sigma_obs_b = 1;        % - translation, b1/b2
 
 % Load the video
-[vid_org,vid] = load_videoreader(current_vid,start_pos,num_frames);
+[vid_org,vid] = load_videoreader(strcat(vid_path_laptop,current_vid),start_pos,num_frames);
+%[vid_org,vid] = load_videoreader(current_vid,start_pos,num_frames);
 
 % Estimate motion
 T = motion_estimation(vid,'affine',full_affine);
 
 % Estimate transformations for stabilization for Nghia, Matsushita, Litvin
-T_nghia = nghia_method(T,smooth_len);
+%T_nghia = nghia_method(T,smooth_len);
 T_mat = matsushita_method(T,k);
 T_lit = litvin_method(T,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_obs_b);
 
@@ -36,7 +37,7 @@ T_lit = litvin_method(T,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_ob
 crop_border = 40;
 vid_lit = warp(vid_org,T_lit,crop_border);
 vid_mat = warp(vid_org,T_mat,crop_border);
-vid_nghia = warp(vid_org,T_nghia,crop_border);
+%vid_nghia = warp(vid_org,T_nghia,crop_border);
 
 % The videos to compare
 vid_play1 = vid_lit;
@@ -63,5 +64,19 @@ trajectory_plotter(T,T_mat,'Matsushita')
 % Litvins
 figure
 trajectory_plotter(T,T_lit,'Litvin');
+
+
+% Load the video
+%[vid,vid_yt] = load_videoreader('Colonoskopi_28117934987_20130326_2036_youtube.mp4',start_pos,num_frames);
+%[vid2,vid_yt] = load_videoreader('vid_youtube.mp4',start_pos,num_frames);
+
+% Estimate motion
+%T_yt = motion_estimation(vid_yt,'affine',full_affine);
+
+% Grundmann
+%figure
+%trajectory_compare(T,T_yt,'Grundmann');
+
+%play_video(vid,vid,1,'single');
 
 
