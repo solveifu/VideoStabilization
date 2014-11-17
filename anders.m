@@ -3,9 +3,9 @@ clear all; close all;
 % Video settings
 vid_path_stasj = 'E:\Dokumenter\Dropbox\Testvideoer\';
 vid_path_laptop = 'D:\Testvideoer\';
-current_vid = 'Colonoskopi_24064049263_20140408-1.avi';
-start_pos = 15; % where to start in seconds
-num_frames = 100;
+current_vid = 'hippo.mp4';
+start_pos = 0; % where to start in seconds
+num_frames = 400;
 
 % Stabilization settings
 full_affine = 1;
@@ -22,8 +22,8 @@ sigma_obs_r = 1;        % - zoom, a1/a4
 sigma_obs_b = 1;        % - translation, b1/b2
 
 % Load the video
-[vid_org,vid] = load_videoreader(strcat(vid_path_laptop,current_vid),start_pos,num_frames);
-%[vid_org,vid] = load_videoreader(current_vid,start_pos,num_frames);
+%[vid_org,vid] = load_videoreader(strcat(vid_path_laptop,current_vid),start_pos,num_frames);
+[vid_org,vid] = load_videoreader(current_vid,start_pos,num_frames);
 
 % Estimate motion
 T = motion_estimation(vid,'affine',full_affine);

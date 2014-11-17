@@ -40,37 +40,37 @@ T2_final_a4 = get_vector(T2_final,2,2);
 
 N=0:length(T_acc_x)-1;
 subplot(3,2,1)
-plot(N,T_acc_x,N,T1_final_x,N,T2_final_x,'r')
+plot(N,T1_final_x,'r',N,T2_final_x,'b',N,T_acc_x,'k','LineWidth',2)
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
 title('b_{1}, x direction');
 subplot(3,2,2)
-plot(N,T_acc_y,N,T1_final_y,N,T2_final_y,'r')
+plot(N,T1_final_y,'r',N,T2_final_y,'b',N,T_acc_y,'k','LineWidth',2)
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
 title('b_{2}, y direction');
 subplot(3,2,3)
-plot(N,T_acc_a1,N,T1_final_a1,N,T2_final_a1,'r')
+plot(N,T1_final_a1,'r',N,T2_final_a1,'b',N,T_acc_a1,'k','LineWidth',2)
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
 title('a_{1}, zoom');
 subplot(3,2,4)
-plot(N,T_acc_a2,N,T1_final_a2,N,T2_final_a2,'r')
+plot(N,T1_final_a2,'r',N,T2_final_a2,'b',N,T_acc_a2,'k','LineWidth',2)
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
 title('a_{2}, rotation');
 subplot(3,2,5)
-plot(N,T_acc_a3,N,T1_final_a3,N,T2_final_a3,'r')
+plot(N,T1_final_a3,'r',N,T2_final_a3,'b',N,T_acc_a3,'k','LineWidth',2)
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
 title('a_{3}, rotation');
 subplot(3,2,6)
-plot(N,T_acc_a4,N,T1_final_a4,N,T2_final_a4,'r')
+plot(N,T1_final_a4,'r',N,T2_final_a4,'b',N,T_acc_a4,'k','LineWidth',2)
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
