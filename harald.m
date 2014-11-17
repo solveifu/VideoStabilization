@@ -2,35 +2,72 @@ clear all; close all;
 
 % Video settings
 vid_path = 'C:\Users\Harald\Documents\Dropbox\Studier\Semester 09\Biomedisinsk signalbehandling\matlab_work\Testvideoer\';
+
+%current_vid = 'Colonoskopi_24064049263_20140408-1.avi';
+%start_pos = 15; % where to start in seconds
+%num_frames = 250;
+
 current_vid = 'colon1.avi';
-start_pos = 0; % where to start in seconds
-num_frames = 400;
+start_pos = 75; % where to start in seconds
+num_frames = 300;
 
 % Stabilization settings
-num_corners = 500;
-dist_corners = 30;
-qual_corners = 0.01;
-full_affine = 0;
+full_affine = 1;
 smooth_len = 50;
+k = 20;
+
+% Dynamic model         % System noise, smaller value give more smoothing
+sigma_z = 0.0001;        % - zoom, a2/a3
+sigma_r = 0.016;         % - rotation, a1/a4
+sigma_b = 0.0001;       % - translation, b1/b2
+                        % Observation noise, larger value gives more smoothing
+sigma_obs_z = 1;        % - zoom, a2/a3
+sigma_obs_r = 1;        % - rotation, a1/a4
+sigma_obs_b = 1;        % - translation, b1/b2
 
 % Load the video
-[vid_org,vid] = load_videoreader(strcat(vid_path,current_vid),start_pos,num_frames);
+[vid_org,vid] = load_videoreader(current_vid,start_pos,num_frames);
 
-% Estimate transformations for stabilization
-%[T_smud,T] = nghia_method(vid,num_corners,qual_corners,dist_corners,full_affine,smooth_len);
-[T_smud,T] = matsushita_method(30,vid,num_corners,qual_corners,dist_corners,1);
+% Estimate motion
+T = motion_estimation(vid,'affine',full_affine);
 
-% Warp frames
-vid_trans = warp(vid_org,T_smud(1:380));
+% Estimate transformations for stabilization for Nghia, Matsushita, Litvin
+%T_nghia = nghia_method(T,smooth_len);
+T_mat = matsushita_method(T,k);
+T_lit = litvin_method(T,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_obs_b);
 
-% Play video 5 times
-play_video(vid_org,vid_trans,2);
+% Warp frames, cropping if crop_border > 0
+crop_border = 40;
+vid_lit = warp(vid_org,T_lit,crop_border);
+vid_mat = warp(vid_org,T_mat,crop_border);
+%vid_nghia = warp(vid_org,T_nghia,crop_border);
 
-%TT = cell2mat(T);
-%Tx =  TT(1:3:end,3);
-%plot(Tx)
+% The videos to compare
+vid_play1 = vid_lit;
+vid_play2 = vid_mat;
 
-trajectory_plotter(T(1:380),T_smud(1:380))
+% Play both videos 5 times
+play_video(vid_org,vid_play2,5,'compare');
 
+% Compare two transformed videos
+%play_video(vid_play1,vid_play2,5,'compare');
 
+% Play stabilized video 2 times
+%play_video(vid_org,vid_play1,1,'single');
 
+% Plot trajectories
+% Nghia 
+%figure
+%trajectory_plotter(T,T_nghia,'Nghia')
+
+% Matsukisatas 
+figure
+trajectory_plotter(T,T_mat,'Matsushita')
+
+% Litvins
+figure
+trajectory_plotter(T,T_lit,'Litvin');
+
+%export_video(vid_lit,'testvideo_lit');
+%export_video(vid_mat,'testvideo_mat');
+%export_video(vid_org,'testvideo_orig');
