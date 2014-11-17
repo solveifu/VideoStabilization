@@ -56,25 +56,25 @@ plot(N,T_acc_a1,N,T1_final_a1,N,T2_final_a1,'r')
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
-title('a_{1}, rotation');
+title('a_{1}, zoom');
 subplot(3,2,4)
 plot(N,T_acc_a2,N,T1_final_a2,N,T2_final_a2,'r')
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
-title('a_{2}, zoom');
+title('a_{2}, rotation');
 subplot(3,2,5)
 plot(N,T_acc_a3,N,T1_final_a3,N,T2_final_a3,'r')
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
-title('a_{3}, zoom');
+title('a_{3}, rotation');
 subplot(3,2,6)
 plot(N,T_acc_a4,N,T1_final_a4,N,T2_final_a4,'r')
 xlabel('Frame number');
 ylabel('Displacement');
 legend('Original','Litvin','Matsushita','location','NorthWest')
-title('a_{4}, rotation');
+title('a_{4}, zoom');
 
 
 

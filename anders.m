@@ -5,7 +5,7 @@ vid_path_stasj = 'E:\Dokumenter\Dropbox\Testvideoer\';
 vid_path_laptop = 'D:\Testvideoer\';
 current_vid = 'Colonoskopi_24064049263_20140408-1.avi';
 start_pos = 15; % where to start in seconds
-num_frames = 1000;
+num_frames = 100;
 
 % Stabilization settings
 full_affine = 1;
@@ -38,13 +38,14 @@ crop_border = 40;
 vid_lit = warp(vid_org,T_lit,crop_border);
 vid_mat = warp(vid_org,T_mat,crop_border);
 %vid_nghia = warp(vid_org,T_nghia,crop_border);
+vid_crop = crop(vid_org,crop_border);
 
 % The videos to compare
 vid_play1 = vid_lit;
 vid_play2 = vid_mat;
 
 % Play both videos 5 times
-play_video(vid_org,vid_lit,5,'compare');
+play_video(vid_org,vid_crop,5,'compare');
 
 % Compare two transformed videos
 play_video(vid_play1,vid_play2,5,'compare');
