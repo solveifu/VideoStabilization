@@ -5,7 +5,7 @@ vid_path_stasj = 'E:\Dokumenter\Dropbox\Testvideoer\';
 vid_path_laptop = 'D:\Testvideoer\';
 current_vid = 'Colonoskopi_24064049263_20140408-1.avi';
 start_pos = 15; % where to start in seconds
-num_frames = 250;
+num_frames = 1000;
 
 % Stabilization settings
 full_affine = 1;
@@ -13,12 +13,12 @@ smooth_len = 100;
 k = 50;
 
 % Dynamic model         % System noise, smaller value give more smoothing
-sigma_z = 0.001;        % - zoom, a2/a3
-sigma_r = 0.04;         % - rotation, a1/a4
-sigma_b = 0.0001;       % - translation, b1/b2
+sigma_z = 0.0001;        % - rotation, a2/a3
+sigma_r = 0.009;         % - zoom, a1/a4
+sigma_b = 0.0002;       % - translation, b1/b2
                         % Observation noise, larger value gives more smoothing
-sigma_obs_z = 1;        % - zoom, a2/a3
-sigma_obs_r = 1;        % - rotation, a1/a4
+sigma_obs_z = 1;        % - rotation, a2/a3
+sigma_obs_r = 1;        % - zoom, a1/a4
 sigma_obs_b = 1;        % - translation, b1/b2
 
 % Load the video
@@ -44,7 +44,7 @@ vid_play1 = vid_lit;
 vid_play2 = vid_mat;
 
 % Play both videos 5 times
-play_video(vid_org,vid_play1,5,'compare');
+play_video(vid_org,vid_lit,5,'compare');
 
 % Compare two transformed videos
 play_video(vid_play1,vid_play2,5,'compare');
@@ -65,6 +65,10 @@ trajectory_plotter(T,T_mat,'Matsushita')
 figure
 trajectory_plotter(T,T_lit,'Litvin');
 
+% Compare trajectories
+figure
+trajectory_plotter_comp(T,T_lit,T_mat);
+
 
 % Load the video
 %[vid,vid_yt] = load_videoreader('Colonoskopi_28117934987_20130326_2036_youtube.mp4',start_pos,num_frames);
@@ -78,5 +82,5 @@ trajectory_plotter(T,T_lit,'Litvin');
 %trajectory_compare(T,T_yt,'Grundmann');
 
 %play_video(vid,vid,1,'single');
-
+export_video(vid_org,'testvideo_org');
 
