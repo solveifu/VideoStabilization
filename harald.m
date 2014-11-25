@@ -3,23 +3,51 @@ clear all; close all;
 % Video settings
 vid_path = 'C:\Users\Harald\Documents\Dropbox\Studier\Semester 09\Biomedisinsk signalbehandling\matlab_work\Testvideoer\';
 
+%JA
 %current_vid = 'Colonoskopi_24064049263_20140408-1.avi';
 %start_pos = 15; % where to start in seconds
+%num_frames = 150;
+
+%NEI
+%current_vid = 'Colonoskopi_04034843509_20140324-1.avi';
+%start_pos = 220; % where to start in seconds
+%num_frames = 350;
+
+
+%JA
+%current_vid = 'colon2.avi';
+%start_pos = 47; % where to start in seconds
+%num_frames = 275;
+
+%NEI
+%current_vid = 'colon1.avi';
+%start_pos = 0; % where to start in seconds
+%num_frames = 400;
+
+%NEI
+%current_vid = 'colon3.avi';
+%start_pos = 35; % where to start in seconds
 %num_frames = 250;
 
-current_vid = 'colon1.avi';
-start_pos = 75; % where to start in seconds
-num_frames = 300;
+%JA!!!!!
+%current_vid = 'fish.avi';
+%start_pos = 15; % where to start in seconds
+%num_frames = 450;
+
+%JA!!!!!
+current_vid = 'hippo.mp4';
+start_pos = 0; % where to start in seconds
+num_frames = 400;
 
 % Stabilization settings
 full_affine = 1;
 smooth_len = 50;
-k = 20;
+k = 30;
 
 % Dynamic model         % System noise, smaller value give more smoothing
-sigma_z = 0.0001;        % - zoom, a2/a3
-sigma_r = 0.016;         % - rotation, a1/a4
-sigma_b = 0.0001;       % - translation, b1/b2
+sigma_z = 0.002;        % - zoom, a2/a3
+sigma_r = 0.08;         % - rotation, a1/a4
+sigma_b = 0.0005;       % - translation, b1/b2
                         % Observation noise, larger value gives more smoothing
 sigma_obs_z = 1;        % - zoom, a2/a3
 sigma_obs_r = 1;        % - rotation, a1/a4
@@ -40,6 +68,7 @@ T_lit = litvin_method(T,sigma_z,sigma_r,sigma_b,sigma_obs_z,sigma_obs_r,sigma_ob
 crop_border = 40;
 vid_lit = warp(vid_org,T_lit,crop_border);
 vid_mat = warp(vid_org,T_mat,crop_border);
+vid_org_crop = crop(vid_org,crop_border);
 %vid_nghia = warp(vid_org,T_nghia,crop_border);
 
 % The videos to compare
@@ -47,7 +76,7 @@ vid_play1 = vid_lit;
 vid_play2 = vid_mat;
 
 % Play both videos 5 times
-play_video(vid_org,vid_play2,5,'compare');
+play_video(vid_org_crop,vid_play2,1,'compare');
 
 % Compare two transformed videos
 %play_video(vid_play1,vid_play2,5,'compare');
@@ -61,13 +90,21 @@ play_video(vid_org,vid_play2,5,'compare');
 %trajectory_plotter(T,T_nghia,'Nghia')
 
 % Matsukisatas 
-figure
-trajectory_plotter(T,T_mat,'Matsushita')
+%figure
+%trajectory_plotter(T,T_mat,'Matsushita')
 
 % Litvins
-figure
-trajectory_plotter(T,T_lit,'Litvin');
+%figure
+%trajectory_plotter(T,T_lit,'Litvin');
 
-%export_video(vid_lit,'testvideo_lit');
-%export_video(vid_mat,'testvideo_mat');
-%export_video(vid_org,'testvideo_orig');
+trajectory_plotter_comp(T,T_lit,T_mat,2)
+
+set(gcf,'color','w')
+set(gcf, 'Position', [0 0 0.6*1600 0.6*400])
+
+export_fig('-pdf','hippo')
+
+
+%export_video(vid_lit,'hippo_lit');
+%export_video(vid_mat,'hippo_mat');
+%export_video(vid_org_crop,'hippo_orig');
