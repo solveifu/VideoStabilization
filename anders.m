@@ -1,11 +1,11 @@
 clear all; close all;
 
 % Video settings
-vid_path_stasj = 'E:\Dokumenter\Dropbox\Testvideoer\';
+vid_path_stasj = 'C:\Users\Anders\Dropbox\Biomedical - Project Papers\video_export\';
 vid_path_laptop = 'D:\Testvideoer\';
-current_vid = 'hippo.mp4';
+current_vid = 'fish_orig.avi';
 start_pos = 0; % where to start in seconds
-num_frames = 400;
+num_frames = 200;
 
 % Stabilization settings
 full_affine = 1;
@@ -22,6 +22,7 @@ sigma_obs_r = 1;        % - zoom, a1/a4
 sigma_obs_b = 1;        % - translation, b1/b2
 
 % Load the video
+%[vid_org,vid] = load_videoreader(strcat(vid_path_stasj,current_vid),start_pos,num_frames);
 %[vid_org,vid] = load_videoreader(strcat(vid_path_laptop,current_vid),start_pos,num_frames);
 [vid_org,vid] = load_videoreader(current_vid,start_pos,num_frames);
 
@@ -73,15 +74,15 @@ trajectory_plotter_comp(T,T_lit,T_mat);
 
 % Load the video
 %[vid,vid_yt] = load_videoreader('Colonoskopi_28117934987_20130326_2036_youtube.mp4',start_pos,num_frames);
-%[vid2,vid_yt] = load_videoreader('vid_youtube.mp4',start_pos,num_frames);
+[vid2,vid_yt] = load_videoreader('fish_youtube.mp4',start_pos,num_frames);
 
 % Estimate motion
-%T_yt = motion_estimation(vid_yt,'affine',full_affine);
+T_yt = motion_estimation(vid_yt,'affine',full_affine);
 
 % Grundmann
-%figure
-%trajectory_compare(T,T_yt,'Grundmann');
+figure
+trajectory_compare(T,T_yt,'Grundmann');
 
 %play_video(vid,vid,1,'single');
-export_video(vid_org,'testvideo_org');
+%export_video(vid_org,'testvideo_org');
 
